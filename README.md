@@ -1,5 +1,9 @@
 pig - dice game instructions + analysis + monte carlo simulation 
 
+HOMEPAGE
+
+[Wikipedia: Pig](http://en.wikipedia.org/wiki/Pig_%28dice%29)
+
 CONTENTS
 
  * pig.txt - Instructions for playing the game

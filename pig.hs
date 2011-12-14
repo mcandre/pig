@@ -38,7 +38,7 @@ sayN playerCount turn name message = putStrLn $ "[Round " ++ show (turn `div` pl
 
 -- Play a game of Pig and return the winner
 
-play :: [Player] -> Int -> Run -> IO Player
+play :: [Player] -> Int -> Run -> IO ()
 play (p:ps) t r = do
 	let n = name p
 	let s = strategy p
@@ -55,7 +55,6 @@ play (p:ps) t r = do
 
 			if score' >= 100 then do
 				say t n "wins!"
-				return p'
 			else do
 				let ps' = ps ++ [p']
 				play ps' (t+1) []
@@ -89,6 +88,12 @@ roll5 (p:_) rs
 	| length rs < 5 = Roll
 	| otherwise = Hold
 
+roll6 :: Strategy
+roll6 (p:_) rs
+	| score p + sum rs >= 100 = Hold
+	| length rs < 6 = Roll
+	| otherwise = Hold
+
 rollK :: Strategy
 rollK (p:ps) rs
 	| score p + sum rs >= 100 = Hold
@@ -109,16 +114,16 @@ defaultPlayer = Player {
 nr = defaultPlayer { name = "Never Roll", strategy = neverRoll }
 ar = defaultPlayer { name = "Always Roll", strategy = alwaysRoll }
 ro = defaultPlayer { name = "Roll Once", strategy = rollOnce }
-rf = defaultPlayer { name = "Roll Five", strategy = roll5 }
+r5 = defaultPlayer { name = "Roll Five", strategy = roll5 }
+r6 = defaultPlayer { name = "Roll Six", strategy = roll6 }
 rk = defaultPlayer { name = "Roll K", strategy = rollK }
 
-test :: [Player] -> IO Player
+test :: [Player] -> IO ()
 test ps = do
 	ps' <- runRVar (shuffle ps) DevRandom
 	play ps' 1 []
 
 main :: IO ()
 main = do
-	let ps = [nr, ar, ro, rf, rk]
-	winner <- test ps
-	putStrLn $ "Yay! The winner is " ++ name winner ++ "!"
+	let ps = [nr, ar, ro, r5, r6, rk]
+	test ps

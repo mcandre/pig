@@ -36,9 +36,9 @@ data Player = Player {
 sayN :: Int -> Int -> String -> String -> IO ()
 sayN playerCount turn name message = putStrLn $ "[Round " ++ show (turn `div` playerCount) ++ "] " ++ name ++ " " ++ message
 
--- Assumes scores start below 100 and run is empty
+-- Play a game of Pig and return the winner
 
-play :: [Player] -> Int -> Run -> IO ()
+play :: [Player] -> Int -> Run -> IO Player
 play (p:ps) t r = do
 	let n = name p
 	let s = strategy p
@@ -49,13 +49,14 @@ play (p:ps) t r = do
 			say t n "holds."
 
 			let score' = score p + sum r
+			let p' = p { score = score' }
 
 			say t n $ "has " ++ show score' ++ " total points."
 
-			if score' >= 100 then
+			if score' >= 100 then do
 				say t n "wins!"
+				return p'
 			else do
-				let p' = p { score = score' }
 				let ps' = ps ++ [p']
 				play ps' (t+1) []
 		Roll -> do
@@ -111,8 +112,13 @@ ro = defaultPlayer { name = "Roll Once", strategy = rollOnce }
 rf = defaultPlayer { name = "Roll Five", strategy = roll5 }
 rk = defaultPlayer { name = "Roll K", strategy = rollK }
 
+test :: [Player] -> IO Player
+test ps = do
+	ps' <- runRVar (shuffle ps) DevRandom
+	play ps' 1 []
+
 main :: IO ()
 main = do
 	let ps = [nr, ar, ro, rf, rk]
-	ps' <- runRVar (shuffle ps) DevRandom
-	play ps' 1 []
+	winner <- test ps
+	putStrLn $ "Yay! The winner is " ++ name winner ++ "!"

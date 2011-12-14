@@ -1,0 +1,116 @@
+Analysis
+
+There are several strategies for playing Pig.
+
+ - Never roll
+ - Always roll
+ - Roll until score >= 100
+ - Roll once each turn
+ - Roll at most n times each turn
+ - Roll at most k times each turn, where k is context dependent
+
+Never Roll
+
+points per turn = 0
+
+E[turns to win] = infinity
+
+This strategy never wins. Fortunately, skipping rolls affords more time for other players.
+
+Always Roll
+
+E[roll] = 1/6
+
+p(1) = 1/6
+
+p(scoring roll) = 1 - p(1) = 5/6
+
+0.5 = 1 - (5/6)^E[length of run]
+
+(5/6)^E[length of run] = 1 - 0.5
+
+(5/6)^E[length of run] = 0.5
+
+E[length of run] = ln base (5/6) 0.5 = ln 0.5 / ln (5/6) > 3.5
+
+E[turns to win] = infinity
+
+This strategy also scores 0 points each turn, and never wins the game as it irrationally rolls even when a run would win the game. This strategy and Never Roll both fail, but Always Roll requires an average of 4 rolls per turn to do so. Always Roll can halt the game for arbitrarily long turns.
+
+Roll Until 100
+
+A minor variation, this strategy attempts to win the game in a single turn.
+
+E[score per roll] = (0 + 2 + 3 + 4 + 5 + 6) / 6 = 20/6 = 10/3 > 3
+
+E[length of winning run] = 100 / (10/3) = 30
+
+p(scoring roll) = 1 - 1/6 = 5/6
+
+p(winning run) = p(scoring roll)^30 = (5/6)^30 < 1%
+
+E[turns to win] = 1 / ((5/6)^30) > 237
+
+On average, Roll Until 100 takes 237 turns to win.
+
+Roll Once
+
+E[turns to win] = 100 / (10/3) = 30
+
+turn difference = (237 - 30) / ((237 + 30) / 2) > 155%
+
+Roll Once will win 155% faster than Roll Until 100 would win; Roll Once would therefore win much more often.
+
+Roll Once is also easy to implement: Roll then hold.
+
+N Rolls
+
+E[score per turn] = 4n * (5/6)^n where n = 1
+
+E[score per turn for n = 1] = 10/3 > 3
+
+E[score per turn for n = 2] = 50/9 > 5
+
+E[score per turn for n = 3] = 125/18 > 6
+
+E[score per turn for n = 4] = 625/81 > 7
+
+E[score per turn for n = 5] = 15625/1944 > 8
+
+E[score per turn for n = 6] = 15625/1944 > 8
+
+E[score per turn for n = 7] = 546875/69984 < 8
+
+...
+
+E[score per turn for n = 26] < 1
+
+N is optimal at 5 or 6, accumulating the most points while balancing the risk of losing the run by rolling 1. E[score; n = 5] = E[score; n = 6], however, players may use N = 5 to save time.
+
+K Rolls
+
+This strategy defines K as a turn-specific value, dependent on the relative scores between players.
+
+Example:
+
+max player score = 98
+
+E[roll] = 10/3
+
+p(max player wins next turn) = 5/6
+
+In this situation, some players have greater odds of winning. The only way to defeat them is to win the turn before they win. In other words, this turn. Therefore, the rational choice is to roll runs until the current player wins. If the current player fails to win, by rolling 1, the opponent may win by rolling anything but 1. If the winning player is unlucky enough to do so, the next player resumes attempting runs, and so on. The player thus adopts the contextual strategy the Roll Until 100 strategy.
+
+K is relative to the maximum player score. At the beginning of the game, all scores are 0, and K = 5, the optimal choice from the N Rolls strategy. As the game progresses and opponents vie for the chance to win, the losing players' K increases, and the winning players' K decreases.
+
+Example:
+
+max player score = 97
+
+E[roll] = 10/3
+
+p(max player wins next turn) = 4/6
+
+In this situation, the winning player would roll once. If the roll is in {3, 4, 5, or 6}, then total >= 100 and the winning player wins. The winning player may roll 1, in which case his score remains 97, and the turn passes to the next player. The winning player may roll 2, for a potential score of 97 + 2 = 99 < 100. He has the choice of continuing to roll, now with a 5/6 chance of winning. If he next rolls 1, his score will stay at 97, the turn passes, and the winning player's chances reduce back to 4/6. However, by holding the 2 and keeping the score at 99, he raises the chance of winning the next turn, and every turn thereafter, to 5/6, the maximum chance of winning.
+
+If multiple players are close to 97, when they roll a 2, the optimal decision is to continue rolling. The odds of losing are only (1/6)*(5/6) = 5/36 < 15% against any one close competitor.

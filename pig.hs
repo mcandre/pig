@@ -104,8 +104,8 @@ roll6 (p:_) rs
 rollK :: Strategy
 rollK (p:ps) rs
 	| score p + sum rs >= 100 = Hold
-	| winning && (length rs < 4) = Roll
-	| length rs < 6 = Roll
+	| winning && (length rs == 1) = Roll
+	| length rs < 5 = Roll
 	| otherwise = Hold
 	where
 		challengers = (sortBy (\a b -> compare (score a) (score b))) (p:ps)

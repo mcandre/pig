@@ -64,6 +64,8 @@ play (p:ps) t r = do
 
 			if pips == 1 then do
 				say t n "pigged."
+				say t n $ "has " ++ show (score p) ++ " total points."
+
 				let ps' = ps ++ [p]
 				play ps' (t+1) []
 			else do

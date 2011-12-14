@@ -14,7 +14,32 @@ EXAMPLE
 
 	$ ./pig.hs
 	...
-	[Round 7] Roll Five rolled 5.
-	[Round 7] Roll Five holds.
-	[Round 7] Roll Five has 104 total points.
-	[Round 7] Roll Five wins!
+	[Round 8] Roll Until 100 rolled 4.
+	[Round 8] Roll Until 100 rolled 5.
+	[Round 8] Roll Until 100 rolled 2.
+	[Round 8] Roll Until 100 rolled 5.
+	[Round 8] Roll Until 100 rolled 6.
+	[Round 8] Roll Until 100 rolled 2.
+	[Round 8] Roll Until 100 rolled 5.
+	[Round 8] Roll Until 100 rolled 6.
+	[Round 8] Roll Until 100 rolled 3.
+	[Round 8] Roll Until 100 rolled 2.
+	[Round 8] Roll Until 100 rolled 6.
+	[Round 8] Roll Until 100 rolled 4.
+	[Round 8] Roll Until 100 rolled 4.
+	[Round 8] Roll Until 100 rolled 4.
+	[Round 8] Roll Until 100 rolled 3.
+	[Round 8] Roll Until 100 rolled 4.
+	[Round 8] Roll Until 100 rolled 6.
+	[Round 8] Roll Until 100 rolled 2.
+	[Round 8] Roll Until 100 rolled 2.
+	[Round 8] Roll Until 100 rolled 2.
+	[Round 8] Roll Until 100 rolled 6.
+	[Round 8] Roll Until 100 rolled 2.
+	[Round 8] Roll Until 100 rolled 4.
+	[Round 8] Roll Until 100 rolled 2.
+	[Round 8] Roll Until 100 rolled 5.
+	[Round 8] Roll Until 100 rolled 4.
+	[Round 8] Roll Until 100 holds.
+	[Round 8] Roll Until 100 has 100 total points.
+	[Round 8] Roll Until 100 wins!

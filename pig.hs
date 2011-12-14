@@ -78,6 +78,11 @@ neverRoll _ _ = Hold
 alwaysRoll :: Strategy
 alwaysRoll _ _ = Roll
 
+rollUntil100 :: Strategy
+rollUntil100 (p:ps) rs
+	| score p + sum rs >= 100 = Hold
+	| otherwise = Roll
+
 rollOnce :: Strategy
 rollOnce _ [] = Roll
 rollOnce _ (r:_) = Hold
@@ -113,6 +118,7 @@ defaultPlayer = Player {
 
 nr = defaultPlayer { name = "Never Roll", strategy = neverRoll }
 ar = defaultPlayer { name = "Always Roll", strategy = alwaysRoll }
+ru = defaultPlayer { name = "Roll Until 100", strategy = rollUntil100 }
 ro = defaultPlayer { name = "Roll Once", strategy = rollOnce }
 r5 = defaultPlayer { name = "Roll Five", strategy = roll5 }
 r6 = defaultPlayer { name = "Roll Six", strategy = roll6 }
@@ -125,5 +131,5 @@ test ps = do
 
 main :: IO ()
 main = do
-	let ps = [nr, ar, ro, r5, r6, rk]
+	let ps = [nr, ar, ru, ro, r5, r6, rk]
 	test ps

@@ -104,8 +104,18 @@ roll6 (p:_) rs
 rollK :: Strategy
 rollK (p:ps) rs
 	| score p + sum rs >= 100 = Hold
-	| winning && (length rs == 1) = Roll
+	| winning && (length rs < 2) = Roll
 	| length rs < 5 = Roll
+	| otherwise = Hold
+	where
+		challengers = (sortBy (\a b -> compare (score a) (score b))) (p:ps)
+		winning = last challengers == p
+
+rollBadK :: Strategy
+rollBadK (p:ps) rs
+	| score p + sum rs >= 100 = Hold
+	| winning && (length rs < 5) = Roll
+	| length rs < 2 = Roll
 	| otherwise = Hold
 	where
 		challengers = (sortBy (\a b -> compare (score a) (score b))) (p:ps)
@@ -125,6 +135,7 @@ ro = defaultPlayer { name = "Roll Once", strategy = rollOnce }
 r5 = defaultPlayer { name = "Roll Five", strategy = roll5 }
 r6 = defaultPlayer { name = "Roll Six", strategy = roll6 }
 rk = defaultPlayer { name = "Roll K", strategy = rollK }
+rb = defaultPlayer { name = "Roll Bad K", strategy = rollBadK }
 
 test :: [Player] -> IO ()
 test ps = do
@@ -133,5 +144,5 @@ test ps = do
 
 main :: IO ()
 main = do
-	let ps = [nr, ar, ru, ro, r5, r6, rk]
+	let ps = [nr, ar, ru, ro, r5, r6, rk, rb]
 	test ps

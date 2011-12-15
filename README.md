@@ -4,6 +4,11 @@ HOMEPAGE
 
 [Wikipedia: Pig](http://en.wikipedia.org/wiki/Pig_%28dice%29)
 
+REQUIREMENTS
+
+ * [Haskell Platform](http://hackage.haskell.org/platform/)
+ * [random-extras](http://hackage.haskell.org/packages/archive/random-extras/latest/doc/html/Data-Random-Extras.html)
+
 CONTENTS
 
  * pig.txt - Instructions for playing the game
@@ -12,34 +17,18 @@ CONTENTS
 
 EXAMPLE
 
-	$ ./pig.hs
-	...
-	[Round 8] Roll Until 100 rolled 4.
-	[Round 8] Roll Until 100 rolled 5.
-	[Round 8] Roll Until 100 rolled 2.
-	[Round 8] Roll Until 100 rolled 5.
-	[Round 8] Roll Until 100 rolled 6.
-	[Round 8] Roll Until 100 rolled 2.
-	[Round 8] Roll Until 100 rolled 5.
-	[Round 8] Roll Until 100 rolled 6.
-	[Round 8] Roll Until 100 rolled 3.
-	[Round 8] Roll Until 100 rolled 2.
-	[Round 8] Roll Until 100 rolled 6.
-	[Round 8] Roll Until 100 rolled 4.
-	[Round 8] Roll Until 100 rolled 4.
-	[Round 8] Roll Until 100 rolled 4.
-	[Round 8] Roll Until 100 rolled 3.
-	[Round 8] Roll Until 100 rolled 4.
-	[Round 8] Roll Until 100 rolled 6.
-	[Round 8] Roll Until 100 rolled 2.
-	[Round 8] Roll Until 100 rolled 2.
-	[Round 8] Roll Until 100 rolled 2.
-	[Round 8] Roll Until 100 rolled 6.
-	[Round 8] Roll Until 100 rolled 2.
-	[Round 8] Roll Until 100 rolled 4.
-	[Round 8] Roll Until 100 rolled 2.
-	[Round 8] Roll Until 100 rolled 5.
-	[Round 8] Roll Until 100 rolled 4.
-	[Round 8] Roll Until 100 holds.
-	[Round 8] Roll Until 100 has 100 total points.
-	[Round 8] Roll Until 100 wins!
+	$ make
+	$ ./pig
+	Running 10000 games...
+	Totaling wins...
+
+	Winners:
+
+	Roll Six       32%
+	Roll Five      28%
+	Roll K Times   27%
+	Roll Until 100 8%
+	Roll Bad K     3%
+	Never Roll     0%
+	Always Roll    0%
+	Roll Once      0%

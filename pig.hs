@@ -5,7 +5,14 @@
 
 {-# LANGUAGE TypeSynonymInstances #-}
 
+{-# LANGUAGE NoImplicitPrelude #-}
+
+import Prelude hiding (lookup)
+
 import Data.List (sortBy)
+import Data.Map hiding (null, filter)
+import Data.Maybe (fromJust)
+import Control.Monad (replicateM)
 
 import Data.Random
 import Data.Random.Source.DevRandom
@@ -34,11 +41,12 @@ data Player = Player {
 -- data Game = Game [Player]
 
 sayN :: Int -> Int -> String -> String -> IO ()
-sayN playerCount turn name message = putStrLn $ "[Round " ++ show (turn `div` playerCount) ++ "] " ++ name ++ " " ++ message
+sayN _ _ _ _ = return ()
+-- sayN playerCount turn name message = putStrLn $ "[Round " ++ show (turn `div` playerCount) ++ "] " ++ name ++ " " ++ message
 
 -- Play a game of Pig and return the winner
 
-play :: [Player] -> Int -> Run -> IO ()
+play :: [Player] -> Int -> Run -> IO Player
 play (p:ps) t r = do
 	let n = name p
 	let s = strategy p
@@ -55,6 +63,7 @@ play (p:ps) t r = do
 
 			if score' >= 100 then do
 				say t n "wins!"
+				return p'
 			else do
 				let ps' = ps ++ [p']
 				play ps' (t+1) []
@@ -134,15 +143,45 @@ ru = defaultPlayer { name = "Roll Until 100", strategy = rollUntil100 }
 ro = defaultPlayer { name = "Roll Once", strategy = rollOnce }
 r5 = defaultPlayer { name = "Roll Five", strategy = roll5 }
 r6 = defaultPlayer { name = "Roll Six", strategy = roll6 }
-rk = defaultPlayer { name = "Roll K", strategy = rollK }
+rk = defaultPlayer { name = "Roll K Times", strategy = rollK }
 rb = defaultPlayer { name = "Roll Bad K", strategy = rollBadK }
 
-test :: [Player] -> IO ()
+test :: [Player] -> IO Player
 test ps = do
 	ps' <- runRVar (shuffle ps) DevRandom
 	play ps' 1 []
 
+track :: [Player] -> Map String Int -> Map String Int
+track [] m = m
+track (p:ps) m = track ps m'
+	where
+		n = name p
+		wins = maybe 0 id (lookup n m)
+		m' = insert n (wins + 1) m
+
+stats :: [Player] -> [(String, Int)]
+stats ps = reverse $ sortBy (\a b -> compare (snd a) (snd b)) $ toList $ track ps empty
+
+addLosers :: [Player] -> [(String, Int)] -> [(String, Int)]
+addLosers [] results = results
+addLosers (p:ps) results
+	| null $ filter (\(n, s) -> n == name p) results = addLosers ps $ results ++ [(name p, 0)]
+	| otherwise = addLosers ps results
+
 main :: IO ()
 main = do
 	let ps = [nr, ar, ru, ro, r5, r6, rk, rb]
-	test ps
+	let n = 10000
+
+	putStrLn $ "Running " ++ show n ++ " games..."
+
+	winners <- replicateM n (test ps)
+
+	putStrLn $ "Totaling wins..."
+
+	let winners' = stats winners
+	let winners'' = addLosers ps winners'
+
+	putStrLn "\nWinners:\n"
+
+	mapM_ (\(name, wins) -> putStrLn $ name ++ "\t" ++ show (100 * wins `div` n) ++ "%") winners''

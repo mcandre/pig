@@ -21,32 +21,22 @@ import Data.Random.Extras hiding (shuffle)
 roll :: IO Int
 roll = runRVar (choice [1..6]) DevRandom
 
-type Score = Int
-
-type Run = [Score]
-
 data Move = Roll | Hold
 
-type Strategy = [Player] -> Run -> Move
-
-instance Eq Strategy where
-	(==) a b = True
+type Strategy = [Player] -> [Int] -> Move
 
 data Player = Player {
 		name :: String,
 		strategy :: Strategy,
-		score :: Score
-	} deriving (Eq)
-
--- data Game = Game [Player]
+		score :: Int
+	}
 
 sayN :: Int -> Int -> String -> String -> IO ()
 sayN _ _ _ _ = return ()
 -- sayN playerCount turn name message = putStrLn $ "[Round " ++ show (turn `div` playerCount) ++ "] " ++ name ++ " " ++ message
 
 -- Play a game of Pig and return the winner
-
-play :: [Player] -> Int -> Run -> IO Player
+play :: [Player] -> Int -> [Int] -> IO Player
 play (p:ps) t r = do
 	let n = name p
 	let s = strategy p
@@ -83,14 +73,14 @@ play (p:ps) t r = do
 	where
 		say = sayN (length ps + 1)
 
-neverRoll :: Strategy
-neverRoll _ _ = Hold
+alwaysHold :: Strategy
+alwaysHold _ _ = Hold
 
 alwaysRoll :: Strategy
 alwaysRoll _ _ = Roll
 
-rollUntil100 :: Strategy
-rollUntil100 (p:ps) rs
+hundredOrBust :: Strategy
+hundredOrBust (p:ps) rs
 	| score p + sum rs >= 100 = Hold
 	| otherwise = Roll
 
@@ -114,21 +104,21 @@ rollK :: Strategy
 rollK (p:ps) rs
 	| score p + sum rs >= 100 = Hold
 	| winning && (length rs < 2) = Roll
-	| length rs < 5 = Roll
+	| length rs < 6 = Roll
 	| otherwise = Hold
 	where
 		challengers = (sortBy (\a b -> compare (score a) (score b))) (p:ps)
-		winning = last challengers == p
+		winning = name (last challengers) == name p
 
 rollBadK :: Strategy
 rollBadK (p:ps) rs
 	| score p + sum rs >= 100 = Hold
-	| winning && (length rs < 5) = Roll
+	| winning && (length rs < 6) = Roll
 	| length rs < 2 = Roll
 	| otherwise = Hold
 	where
 		challengers = (sortBy (\a b -> compare (score a) (score b))) (p:ps)
-		winning = last challengers == p
+		winning = name (last challengers) == name p
 
 defaultPlayer :: Player
 defaultPlayer = Player {
@@ -137,9 +127,9 @@ defaultPlayer = Player {
 		score = 0
 	}
 
-nr = defaultPlayer { name = "Never Roll", strategy = neverRoll }
+ah = defaultPlayer { name = "Always Hold", strategy = alwaysHold }
 ar = defaultPlayer { name = "Always Roll", strategy = alwaysRoll }
-ru = defaultPlayer { name = "Roll Until 100", strategy = rollUntil100 }
+hob = defaultPlayer { name = "100 or Bust", strategy = hundredOrBust }
 ro = defaultPlayer { name = "Roll Once", strategy = rollOnce }
 r5 = defaultPlayer { name = "Roll Five", strategy = roll5 }
 r6 = defaultPlayer { name = "Roll Six", strategy = roll6 }
@@ -170,7 +160,7 @@ addLosers (p:ps) results
 
 main :: IO ()
 main = do
-	let ps = [nr, ar, ru, ro, r5, r6, rk, rb]
+	let ps = [ah, ar, hob, ro, r5, r6, rk, rb]
 	let n = 10000
 
 	putStrLn $ "Running " ++ show n ++ " games..."

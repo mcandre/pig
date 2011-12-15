@@ -11,8 +11,7 @@ REQUIREMENTS
 
 CONTENTS
 
- * pig.txt - Instructions for playing the game
- * analysis.txt - Probabilistic game deconstruction
+ * analysis.pdf - Statistical analysis
  * pig.hs - Monte Carlo simulation in Haskell
 
 EXAMPLE
@@ -25,8 +24,8 @@ EXAMPLE
 	Roll Six       32%
 	Roll Five      28%
 	Roll K Times   27%
-	Roll Until 100 8%
+	100 or Bust    8%
 	Roll Bad K     3%
-	Never Roll     0%
+	Always Hold    0%
 	Always Roll    0%
 	Roll Once      0%

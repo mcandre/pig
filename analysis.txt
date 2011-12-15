@@ -49,19 +49,19 @@ p(scoring roll) = 1 - 1/6 = 5/6
 
 p(winning run) = p(scoring roll)^30 = (5/6)^30 < 1%
 
-E[turns to win] = 1 / ((5/6)^30) > 237
+0.5 = 1 - ((5/6)^30)^E[turns to win]
 
-On average, Roll Until 100 takes 237 turns to win.
+((5/6)^30)^E[turns to win] = 1 - 0.5
+
+((5/6)^30)^E[turns to win] = 0.5
+
+E[turns to win] = ln base ((5/6)^30) 0.5 < 8
 
 Roll Once
 
 E[turns to win] = 100 / (10/3) = 30
 
-turn difference = (237 - 30) / ((237 + 30) / 2) > 155%
-
-Roll Once will win 155% faster than Roll Until 100 would win; Roll Once would therefore win much more often.
-
-Roll Once is also easy to implement: Roll then hold.
+Roll Once is slow and statistically too conservative, but it is easy to implement.
 
 N Rolls
 

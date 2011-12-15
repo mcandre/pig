@@ -22,8 +22,6 @@ EXAMPLE
 	Running 10000 games...
 	Totaling wins...
 
-	Winners:
-
 	Roll Six       32%
 	Roll Five      28%
 	Roll K Times   27%

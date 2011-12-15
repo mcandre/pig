@@ -177,11 +177,9 @@ main = do
 
 	winners <- replicateM n (test ps)
 
-	putStrLn $ "Totaling wins..."
+	putStrLn $ "Totaling wins...\n"
 
 	let winners' = stats winners
 	let winners'' = addLosers ps winners'
-
-	putStrLn "\nWinners:\n"
 
 	mapM_ (\(name, wins) -> putStrLn $ name ++ "\t" ++ show (100 * wins `div` n) ++ "%") winners''

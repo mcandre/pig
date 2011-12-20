@@ -1,20 +1,20 @@
-pig - dice game instructions + analysis + monte carlo simulation 
+# pig - dice game instructions + analysis + monte carlo simulation 
 
-HOMEPAGE
+## HOMEPAGE
 
 [Wikipedia: Pig](http://en.wikipedia.org/wiki/Pig_%28dice%29)
 
-REQUIREMENTS
+## REQUIREMENTS
 
  * [Haskell Platform](http://hackage.haskell.org/platform/)
  * [random-extras](http://hackage.haskell.org/packages/archive/random-extras/latest/doc/html/Data-Random-Extras.html)
 
-CONTENTS
+## CONTENTS
 
  * analysis.pdf - Statistical analysis
  * pig.hs - Monte Carlo simulation in Haskell
 
-EXAMPLE
+## EXAMPLE
 
 	$ make
 	$ ./pig

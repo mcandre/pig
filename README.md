@@ -16,16 +16,16 @@
 
 ## EXAMPLE
 
-	$ make
-	$ ./pig
-	Running 10000 games...
-	Totaling wins...
+    $ make
+    $ ./pig
+    Running 10000 games...
+    Totaling wins...
 
-	Roll Six       32%
-	Roll Five      28%
-	Roll K Times   27%
-	100 or Bust    8%
-	Roll Bad K     3%
-	Always Hold    0%
-	Always Roll    0%
-	Roll Once      0%
+    Roll Six       32%
+    Roll Five      28%
+    Roll K Times   27%
+    100 or Bust    8%
+    Roll Bad K     3%
+    Always Hold    0%
+    Always Roll    0%
+    Roll Once      0%

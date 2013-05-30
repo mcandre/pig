@@ -9,13 +9,15 @@
 import Prelude hiding (lookup)
 
 import Data.List (sortBy)
+import Data.Ord (comparing)
 import Data.Map hiding (null, filter)
-import Data.Maybe (fromJust)
-import Control.Monad (replicateM)
+import Data.Maybe (fromJust, fromMaybe)
 
 import Data.Random
 import Data.Random.Source.DevRandom
 import Data.Random.Extras hiding (shuffle)
+
+import Control.Monad (replicateM)
 
 roll :: IO Int
 roll = runRVar (choice [1..6]) DevRandom
@@ -106,7 +108,7 @@ rollK (p:ps) rs
   | length rs < 6 = Roll
   | otherwise = Hold
   where
-    challengers = (sortBy (\a b -> compare (score a) (score b))) (p:ps)
+    challengers = sortBy (comparing score) (p:ps)
     winning = name (last challengers) == name p
 
 rollBadK :: Strategy
@@ -116,7 +118,7 @@ rollBadK (p:ps) rs
   | length rs < 2 = Roll
   | otherwise = Hold
   where
-    challengers = (sortBy (\a b -> compare (score a) (score b))) (p:ps)
+    challengers = sortBy (comparing score) (p:ps)
     winning = name (last challengers) == name p
 
 defaultPlayer :: Player
@@ -145,16 +147,16 @@ track [] m = m
 track (p:ps) m = track ps m'
   where
     n = name p
-    wins = maybe 0 id (lookup n m)
+    wins = fromMaybe 0 (lookup n m)
     m' = insert n (wins + 1) m
 
 stats :: [Player] -> [(String, Int)]
-stats ps = reverse $ sortBy (\a b -> compare (snd a) (snd b)) $ toList $ track ps empty
+stats = reverse . sortBy (comparing snd) . toList . flip track empty
 
 addLosers :: [Player] -> [(String, Int)] -> [(String, Int)]
 addLosers [] results = results
 addLosers (p:ps) results
-  | null $ filter (\(n, s) -> n == name p) results = addLosers ps $ results ++ [(name p, 0)]
+  | not (any (\(n, s) -> n == name p) results) = addLosers ps $ results ++ [(name p, 0)]
   | otherwise = addLosers ps results
 
 main :: IO ()
@@ -166,7 +168,7 @@ main = do
 
   winners <- replicateM n (test ps)
 
-  putStrLn $ "Totaling wins...\n"
+  putStrLn "Totaling wins...\n"
 
   let winners' = stats winners
   let winners'' = addLosers ps winners'

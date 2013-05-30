@@ -18,6 +18,7 @@
  * analysis.pdf - Statistical analysis
  * pig.hs - Monte Carlo simulation in Haskell
 
+<<<<<<< HEAD
 # EXAMPLE
 
     $ git clone https://github.com/mcandre/pig.git
@@ -25,6 +26,12 @@
     $ cabal install random-fu
     $ make
     ./pig
+=======
+## EXAMPLE
+
+    $ make
+    $ ./pig
+>>>>>>> 69cfbf6953abee690ebeb210f6c355bcbb93e911
     Running 10000 games...
     Totaling wins...
 

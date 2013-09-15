@@ -2,3 +2,4 @@
 pig
 *.o
 *.hi
+Gemfile.lock

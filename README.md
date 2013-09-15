@@ -12,13 +12,16 @@
 ## Optional
 
  * [LaTeX](http://www.latex-project.org/)
+ * [Ruby](https://www.ruby-lang.org/) 1.9+
+ * [Guard](http://guardgem.org/) 1.8.2+
+
+Use `bundle` to install Guard.
 
 # CONTENTS
 
  * analysis.pdf - Statistical analysis
  * pig.hs - Monte Carlo simulation in Haskell
 
-<<<<<<< HEAD
 # EXAMPLE
 
     $ git clone https://github.com/mcandre/pig.git
@@ -26,12 +29,6 @@
     $ cabal install random-fu
     $ make
     ./pig
-=======
-## EXAMPLE
-
-    $ make
-    $ ./pig
->>>>>>> 69cfbf6953abee690ebeb210f6c355bcbb93e911
     Running 10000 games...
     Totaling wins...
 
@@ -43,3 +40,19 @@
     Always Hold    0%
     Always Roll    0%
     Roll Once      0%
+
+# DEVELOPMENT
+
+## Guard
+
+Start Guard in a shell, and it will automatically run unit tests when the source code changes:
+
+    $ guard
+        ...
+
+## Lint
+
+Keep the code tidy with HLint:
+
+    $ cabal install hlint
+    $ make lint

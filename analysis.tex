@@ -5,10 +5,10 @@
 \date{December 14, 2010}
 
 \usepackage[
-	pdfauthor={Andrew Pennebaker},
-	pdftitle={Pig Analysis},
-	pdfborder={0 0 0},
-	urlbordercolor={1 1 1}
+  pdfauthor={Andrew Pennebaker},
+  pdftitle={Pig Analysis},
+  pdfborder={0 0 0},
+  urlbordercolor={1 1 1}
 ]{hyperref}
 
 % Verbatim tabs
@@ -27,7 +27,7 @@ Pig is an old dice game for two or more players. They need not be human, as in a
 \subsection*{Game Requirements}
 \begin{itemize}
 \item A six-sided die (1d6)
-\item A scoring mechanism (e.g. pencil and paper)
+\item A scoring mechanism (e.g.\ pencil and paper)
 \end{itemize}
 
 \subsection*{Objective}
@@ -139,10 +139,10 @@ type Strategy = [Player] -> [Int] -> Move
 A player can be modeled with three variables: name, strategy, and current score. With extra effort, these could be treated as two variables, where a strategy encodes its own name programmatically for reference purposes.
 \begin{verbatimtab}
 data Player = Player {
-		name :: String,
-		strategy :: Strategy,
-		score :: Int
-	}
+  name :: String,
+  strategy :: Strategy,
+  score :: Int
+  }
 \end{verbatimtab}
 In detail, the information available to a player consists of a rotating list of players, where the first player in the list is the current player, and a list of the current player's run (an empty list if the player has not yet rolled).
 \\\\
@@ -160,8 +160,8 @@ The 100 or Bust strategy is implemented using list pattern matching (:) to extra
 \begin{verbatimtab}
 hundredOrBust :: Strategy
 hundredOrBust (p:ps) rs
-	| score p + sum rs >= 100 = Hold
-	| otherwise = Roll
+  | score p + sum rs >= 100 = Hold
+  | otherwise = Roll
 \end{verbatimtab}
 Arbitrary strategies can be implemented once Haskell proficiency is achieved.
 \\\\
@@ -169,10 +169,10 @@ Creating players and their strategies is boilerplate coding, but boilerplate can
 \begin{verbatimtab}
 defaultPlayer :: Player
 defaultPlayer = Player {
-		name = "Player",
-		strategy = roll5,
-		score = 0
-	}
+  name = "Player",
+  strategy = roll5,
+  score = 0
+  }
 
 rb = defaultPlayer { name = "Roll Bad K", strategy = rollBadK }
 \end{verbatimtab}
@@ -185,13 +185,13 @@ $ ./pig
 Running 10000 games...
 Totaling wins...
 
-Roll K Times	30%
-Roll Six	30%
-Roll Five	27%
-100 or Bust	8%
-Roll Bad K	3%
-Always Hold	0%
-Always Roll	0%
-Roll Once	0%
+Roll K Times  30%
+Roll Six  30%
+Roll Five 27%
+100 or Bust 8%
+Roll Bad K  3%
+Always Hold 0%
+Always Roll 0%
+Roll Once 0%
 \end{verbatimtab}
 \end{document}

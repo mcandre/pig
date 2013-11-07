@@ -7,7 +7,8 @@ pig: pig.hs
 	ghc --make -o pig pig.hs -package random-extras
 
 lint:
-	hlint .
+	-hlint .
+	-for f in *.tex; do lacheck $$f; done	
 
 clean:
 	-rm *.exe

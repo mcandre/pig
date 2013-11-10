@@ -6,9 +6,16 @@ test: pig
 pig: pig.hs
 	ghc --make -o pig pig.hs -package random-extras
 
-lint:
+hlint:
 	-hlint .
-	-for f in *.tex; do lacheck $$f; done	
+
+lacheck:
+	-for f in *.tex; do lacheck $$f; done
+
+style-check:
+	-style-check.rb *.tex
+
+lint: hlint lacheck style-check
 
 clean:
 	-rm *.exe

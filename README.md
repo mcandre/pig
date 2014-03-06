@@ -4,19 +4,6 @@
 
 [Wikipedia: Pig](http://en.wikipedia.org/wiki/Pig_%28dice%29)
 
-# REQUIREMENTS
-
- * [Haskell](http://www.haskell.org/)
- * [random-extras](http://hackage.haskell.org/package/random-extras)
-
-## Optional
-
- * [LaTeX](http://www.latex-project.org/)
- * [Ruby](https://www.ruby-lang.org/) 1.9+
- * [Guard](http://guardgem.org/) 1.8.2+
-
-Use `bundle` to install Guard.
-
 # CONTENTS
 
  * analysis.pdf - Statistical analysis
@@ -41,14 +28,23 @@ Use `bundle` to install Guard.
     Always Roll    0%
     Roll Once      0%
 
+# REQUIREMENTS
+
+* [Haskell](http://www.haskell.org/)
+* [random-extras](http://hackage.haskell.org/package/random-extras)
+
+## Optional
+
+* [LaTeX](http://www.latex-project.org/)
+* [Ruby](https://www.ruby-lang.org/) 1.9+
+* [Guard](http://guardgem.org/) 1.8.2+
+* [aspelllint](https://github.com/mcandre/aspelllint)
+
+Install Guard and aspelllint:
+
+    $ bundle
+
 # DEVELOPMENT
-
-## Guard
-
-Start Guard in a shell, and it will automatically run unit tests when the source code changes:
-
-    $ guard
-        ...
 
 ## Lint
 
@@ -56,3 +52,15 @@ Keep the code tidy with HLint:
 
     $ cabal install hlint
     $ make lint
+
+## Spell Check
+
+    $ aspelllint
+    ...
+
+## Local CI
+
+Start Guard in a shell, and it will automatically run unit tests when the source code changes:
+
+    $ guard
+    ...

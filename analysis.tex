@@ -85,7 +85,7 @@ $E[turns] = \frac{100}{E[rollScore]} = 30$
 \\\\
 This strategy is simple to implement. Intuitively, it seems like it would win more often than 100 or Bust. However, Roll Once is actually too conservative. $\frac{10}{3}$ points per turn is too few, and 100 or Bust will tend to reach 100 more quickly and therefore win more often.
 \subsection*{Roll $n$}
-Rolling only once per turn is suboptimal because $p(pigging) = \frac{1}{6}$. Rolling more times per turn will gain more points, balancing against increasing odds of pigging.
+Rolling only once per turn is sub-optimal because $p(pigging) = \frac{1}{6}$. Rolling more times per turn will gain more points, balancing against increasing odds of pigging.
 \\\\
 $E[scorePerTurn] = 4n \cdot p(scoringRoll)^n$
 \\\\
@@ -125,7 +125,7 @@ $k$ could be relative to the max player score. At the beginning of the game, whe
 Conversely, when a player is winning and close to 100 points, $k$ decreases to 1, the Roll Once strategy. At $score = 98$, the next roll will either win the game or pig.
 
 \section*{Monte Carlo}
-An automated simulation for evaluating Pig strategies was implemented in Haskell. As a pure, functional, type-safe language, Haskell may seem unequipped to handle rolling dice, a necessarily nonpure computation (either stateful for pseudorandom number generators or I/O intensive for natural random number generation). In fact, Haskell is up to the task. A custom $roll$ function returns a random number from 1 to 6.
+An automated simulation for evaluating Pig strategies was implemented in Haskell. As a pure, functional, type-safe language, Haskell may seem unequipped to handle rolling dice, a necessarily non-pure computation (either stateful for pseudorandom number generators or I/O intensive for natural random number generation). In fact, Haskell is up to the task. A custom $roll$ function returns a random number from 1 to 6.
 \begin{verbatimtab}
 roll :: IO Int
 roll = runRVar (choice [1..6]) DevRandom
@@ -176,7 +176,7 @@ defaultPlayer = Player {
 
 rb = defaultPlayer { name = "Roll Bad K", strategy = rollBadK }
 \end{verbatimtab}
-A default player is assumed to be using the Roll 5 strategy, and all players start the game with 0 points. Here, a player employs a particularly suboptimal strategy, Bad $k$, the opposite of Roll $k$. The player will begin by rolling too conservatively, staying behind his opponents' scores, and in the unlikely event his score surpasses his peers', he will roll recklessly when he is winning, handing the game back to them.
+A default player is assumed to be using the Roll 5 strategy, and all players start the game with 0 points. Here, a player employs a particularly sub-optimal strategy, Bad $k$, the opposite of Roll $k$. The player will begin by rolling too conservatively, staying behind his opponents' scores, and in the unlikely event his score surpasses his peers', he will roll recklessly when he is winning, handing the game back to them.
 \\\\
 Statistical analysis of a simple folk game may be overkill. In any case, the rest of the code is tedium: shuffling players and running $n = 10,000$ simulated games. $n$ appears to be large enough that running $n+$ simulations would produce similar results, $\pm 1\%$.
 \begin{verbatimtab}

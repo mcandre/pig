@@ -6,6 +6,8 @@
 {-# LANGUAGE TypeSynonymInstances #-}
 {-# LANGUAGE NoImplicitPrelude #-}
 
+module Pig where
+
 import Prelude hiding (lookup)
 
 import Data.List (sortBy)
@@ -81,6 +83,7 @@ alwaysRoll :: Strategy
 alwaysRoll _ _ = Roll
 
 hundredOrBust :: Strategy
+hundredOrBust [] _ = Hold
 hundredOrBust (p:ps) rs
   | score p + sum rs >= 100 = Hold
   | otherwise = Roll
@@ -90,18 +93,21 @@ rollOnce _ [] = Roll
 rollOnce _ (r:_) = Hold
 
 roll5 :: Strategy
+roll5 [] _ = Hold
 roll5 (p:_) rs
   | score p + sum rs >= 100 = Hold
   | length rs < 5 = Roll
   | otherwise = Hold
 
 roll6 :: Strategy
+roll6 [] _ = Hold
 roll6 (p:_) rs
   | score p + sum rs >= 100 = Hold
   | length rs < 6 = Roll
   | otherwise = Hold
 
 rollK :: Strategy
+rollK [] _ = Hold
 rollK (p:ps) rs
   | score p + sum rs >= 100 = Hold
   | winning && (length rs < 2) = Roll
@@ -112,6 +118,7 @@ rollK (p:ps) rs
     winning = name (last challengers) == name p
 
 rollBadK :: Strategy
+rollBadK [] _ = Hold
 rollBadK (p:ps) rs
   | score p + sum rs >= 100 = Hold
   | winning && (length rs < 6) = Roll
@@ -128,13 +135,28 @@ defaultPlayer = Player {
   score = 0
   }
 
+ah :: Player
 ah = defaultPlayer { name = "Always Hold", strategy = alwaysHold }
+
+ar :: Player
 ar = defaultPlayer { name = "Always Roll", strategy = alwaysRoll }
+
+hob :: Player
 hob = defaultPlayer { name = "100 or Bust", strategy = hundredOrBust }
+
+ro :: Player
 ro = defaultPlayer { name = "Roll Once", strategy = rollOnce }
+
+r5 :: Player
 r5 = defaultPlayer { name = "Roll Five", strategy = roll5 }
+
+r6 :: Player
 r6 = defaultPlayer { name = "Roll Six", strategy = roll6 }
+
+rk :: Player
 rk = defaultPlayer { name = "Roll K Times", strategy = rollK }
+
+rb :: Player
 rb = defaultPlayer { name = "Roll Bad K", strategy = rollBadK }
 
 test :: [Player] -> IO Player
@@ -151,12 +173,12 @@ track (p:ps) m = track ps m'
     m' = insert n (wins + 1) m
 
 stats :: [Player] -> [(String, Int)]
-stats = reverse . sortBy (comparing snd) . toList . flip track empty
+stats = sortBy (flip (comparing snd)) . toList . flip track empty
 
 addLosers :: [Player] -> [(String, Int)] -> [(String, Int)]
 addLosers [] results = results
 addLosers (p:ps) results
-  | not (any (\(n, s) -> n == name p) results) = addLosers ps $ results ++ [(name p, 0)]
+  | not (any (\(n, _) -> n == name p) results) = addLosers ps $ results ++ [(name p, 0)]
   | otherwise = addLosers ps results
 
 main :: IO ()

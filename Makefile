@@ -1,10 +1,14 @@
 all: test
 
-test: pig
-	./pig
+BIN=pig
 
-pig: pig.hs
-	ghc --make -o pig pig.hs -package random-extras
+FLAGS=-O2 -Wall -fwarn-tabs --make -fforce-recomp -o $(BIN) -main-is Pig
+
+test: $(BIN)
+	./$(BIN)
+
+$(BIN): Pig.hs
+	ghc $(FLAGS) Pig.hs -package random-extras
 
 hlint:
 	-hlint .
@@ -18,7 +22,7 @@ style-check:
 lint: hlint lacheck style-check
 
 clean:
+	-rm $(BIN)
 	-rm *.exe
-	-rm pig
-	-rm pig.o
-	-rm pig.hi
+	-rm *.o
+	-rm *.hi

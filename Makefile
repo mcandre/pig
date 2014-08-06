@@ -1,13 +1,14 @@
 all: test
 
-BIN=pig
+BIN=bin/pig
 
 FLAGS=-O2 -Wall -fwarn-tabs --make -fforce-recomp -o $(BIN) -main-is Pig
 
 test: $(BIN)
-	./$(BIN)
+	$(BIN)
 
 $(BIN): Pig.hs
+	mkdir -p bin/
 	ghc $(FLAGS) Pig.hs -package random-extras
 
 hlint:
@@ -22,7 +23,6 @@ style-check:
 lint: hlint lacheck style-check
 
 clean:
-	-rm $(BIN)
-	-rm *.exe
+	-rm -rf bin/
 	-rm *.o
 	-rm *.hi

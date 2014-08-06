@@ -13,7 +13,7 @@ import Prelude hiding (lookup)
 import Data.List (sortBy)
 import Data.Ord (comparing)
 import Data.Map hiding (null, filter)
-import Data.Maybe (fromJust, fromMaybe)
+import Data.Maybe (fromMaybe)
 
 import Data.Random
 import Data.Random.Source.DevRandom
@@ -40,6 +40,7 @@ sayN _ _ _ _ = return ()
 
 -- Play a game of Pig and return the winner
 play :: [Player] -> Int -> [Int] -> IO Player
+play [] _ _ = return Player { name = "", strategy = alwaysHold, score = 0 }
 play (p:ps) t r = do
   let n = name p
   let s = strategy p
@@ -84,13 +85,13 @@ alwaysRoll _ _ = Roll
 
 hundredOrBust :: Strategy
 hundredOrBust [] _ = Hold
-hundredOrBust (p:ps) rs
+hundredOrBust (p:_) rs
   | score p + sum rs >= 100 = Hold
   | otherwise = Roll
 
 rollOnce :: Strategy
 rollOnce _ [] = Roll
-rollOnce _ (r:_) = Hold
+rollOnce _ _ = Hold
 
 roll5 :: Strategy
 roll5 [] _ = Hold
@@ -195,4 +196,4 @@ main = do
   let winners' = stats winners
   let winners'' = addLosers ps winners'
 
-  mapM_ (\(name, wins) -> putStrLn $ name ++ "\t" ++ show (100 * wins `div` n) ++ "%") winners''
+  mapM_ (\(name', wins) -> putStrLn $ name' ++ "\t" ++ show (100 * wins `div` n) ++ "%") winners''

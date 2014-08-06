@@ -1,5 +1,4 @@
-*.exe
-pig
+bin/
 *.o
 *.hi
 Gemfile.lock

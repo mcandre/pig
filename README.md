@@ -1,66 +1,64 @@
-# pig - dice game instructions + analysis + monte carlo simulation 
-
-# HOMEPAGE
-
-[Wikipedia: Pig](http://en.wikipedia.org/wiki/Pig_%28dice%29)
-
-# CONTENTS
-
- * analysis.pdf - Statistical analysis
- * pig.hs - Monte Carlo simulation in Haskell
+# pig - dice game instructions + analysis + monte carlo simulation
 
 # EXAMPLE
 
-    $ git clone https://github.com/mcandre/pig.git
-    $ cd pig
-    $ cabal install random-fu
-    $ make
-    ./pig
-    Running 10000 games...
-    Totaling wins...
+```console
+$ git clone https://github.com/mcandre/pig.git
+$ cd pig
+$ cabal install random-fu
+$ make
+./pig
+Running 10000 games...
+Totaling wins...
 
-    Roll Six       32%
-    Roll Five      28%
-    Roll K Times   27%
-    100 or Bust    8%
-    Roll Bad K     3%
-    Always Hold    0%
-    Always Roll    0%
-    Roll Once      0%
+Roll Six       32%
+Roll Five      28%
+Roll K Times   27%
+100 or Bust    8%
+Roll Bad K     3%
+Always Hold    0%
+Always Roll    0%
+Roll Once      0%
+```
 
-# REQUIREMENTS
+[Wikipedia: Pig](http://en.wikipedia.org/wiki/Pig_%28dice%29)
 
-* [Haskell](http://www.haskell.org/)
-* [random-extras](http://hackage.haskell.org/package/random-extras)
+# RUNTIME REQUIREMENTS
 
-## Optional
+(None)
 
-* [LaTeX](http://www.latex-project.org/)
-* [Ruby](https://www.ruby-lang.org/) 1.9+
-* [Guard](http://guardgem.org/) 1.8.2+
-* [aspelllint](https://github.com/mcandre/aspelllint)
+# BUILDTIME REQUIREMENTS
 
-Install Guard and aspelllint:
+* [GHC Haskell](http://www.haskell.org/) 8+
 
-    $ bundle
+## Recommended
 
-# DEVELOPMENT
+* [shake](https://shakebuild.com/) (e.g., `cabal install shake`)
+* [hlint](https://hackage.haskell.org/package/hlint) (e.g., `cabal install happy; cabal install hlint`)
+* [LaTeX](https://www.latex-project.org/)
 
-## Lint
+# BUILD
 
-Keep the code tidy with HLint:
+```console
+$ cabal install --only-dependencies --enable-documentation
+$ cabal install --only-dependencies --enable-tests
+$ shake
+```
 
-    $ cabal install hlint
-    $ make lint
+# LINT
 
-## Spell Check
+```console
+$ shake lint
+```
 
-    $ aspelllint
-    ...
+# TEST
 
-## Local CI
+```console
+$ shake test
+```
 
-Start Guard in a shell, and it will automatically run unit tests when the source code changes:
+# PUBLISH
 
-    $ guard
-    ...
+```console
+$ shake publish
+```

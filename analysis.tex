@@ -11,9 +11,6 @@
   urlbordercolor={1 1 1}
 ]{hyperref}
 
-% Verbatim tabs
-\usepackage{moreverb}
-
 \begin{document}
 
 \maketitle
@@ -126,47 +123,47 @@ Conversely, when a player is winning and close to 100 points, $k$ decreases to 1
 
 \section*{Monte Carlo}
 An automated simulation for evaluating Pig strategies was implemented in Haskell. As a pure, functional, type-safe language, Haskell may seem unequipped to handle rolling dice, a necessarily non-pure computation (either stateful for pseudorandom number generators or I/O intensive for natural random number generation). In fact, Haskell is up to the task. A custom $roll$ function returns a random number from 1 to 6.
-\begin{verbatimtab}
+\begin{verbatim}
 roll :: IO Int
 roll = runRVar (choice [1..6]) DevRandom
-\end{verbatimtab}
+\end{verbatim}
 Some strategies are harder to implement than others, but a Pig strategy is nonetheless a function which takes a subset of the information in the game state and decides the next move. In reality, game state includes various and sundry information, such as whether lunch is nearly over or whether there's a cute girl nearby. Metastrategies such as substituting trick dice or bullying players into skipping turns would significantly add to simulation complexity. For the purposes of the monte carlo, the game information reduces to the player's current scores and the status of the current run. Pig is such a simple game that there are only two moves: roll or hold.
-\begin{verbatimtab}
+\begin{verbatim}
 data Move = Roll | Hold
 
 type Strategy = [Player] -> [Int] -> Move
-\end{verbatimtab}
+\end{verbatim}
 A player can be modeled with three variables: name, strategy, and current score. With extra effort, these could be treated as two variables, where a strategy encodes its own name programmatically for reference purposes.
-\begin{verbatimtab}
+\begin{verbatim}
 data Player = Player {
   name :: String,
   strategy :: Strategy,
   score :: Int
   }
-\end{verbatimtab}
+\end{verbatim}
 In detail, the information available to a player consists of a rotating list of players, where the first player in the list is the current player, and a list of the current player's run (an empty list if the player has not yet rolled).
 \\\\
 The Always Hold strategy disregards game state and always holds; a constant function. Haskell uses an underscore (\_) to denote conditions irrelevant to a computation. Both player list and run list are irrelevant, so they may be underscored from the function inputs. Haskell uses double colons (::) to specify types for robustness, clarity, and code generation. Many of them can be omitted (Haskell has a powerful type inference system), but the signatures shall remain here for readability.
-\begin{verbatimtab}
+\begin{verbatim}
 alwaysHold :: Strategy
 alwaysHold _ _ = Hold
-\end{verbatimtab}
+\end{verbatim}
 Similarly, the Always Roll strategy disregards game state.
-\begin{verbatimtab}
+\begin{verbatim}
 alwaysRoll :: Strategy
 alwaysRoll _ _ = Roll
-\end{verbatimtab}
+\end{verbatim}
 The 100 or Bust strategy is implemented using list pattern matching (:) to extract the current player and guards (\textbar) as syntactic sugar for conditionals. There is a subtle bug: Should a simulation run with no players, the $hundredOrBust$ strategy will return an error as it is not defined for a list without at least one players. The simulation can gain robustness by adding a clause after the signature to handle the case where the player list is empty ([]).
-\begin{verbatimtab}
+\begin{verbatim}
 hundredOrBust :: Strategy
 hundredOrBust (p:ps) rs
   | score p + sum rs >= 100 = Hold
   | otherwise = Roll
-\end{verbatimtab}
+\end{verbatim}
 Arbitrary strategies can be implemented once Haskell proficiency is achieved.
 \\\\
 Creating players and their strategies is boilerplate coding, but boilerplate can be minimized with the use of default constructors (and further minimized with Lisp macros).
-\begin{verbatimtab}
+\begin{verbatim}
 defaultPlayer :: Player
 defaultPlayer = Player {
   name = "Player",
@@ -175,12 +172,12 @@ defaultPlayer = Player {
   }
 
 rb = defaultPlayer { name = "Roll Bad K", strategy = rollBadK }
-\end{verbatimtab}
+\end{verbatim}
 A default player is assumed to be using the Roll 5 strategy, and all players start the game with 0 points. Here, a player employs a particularly sub-optimal strategy, Bad $k$, the opposite of Roll $k$. The player will begin by rolling too conservatively, staying behind his opponents' scores, and in the unlikely event his score surpasses his peers', he will roll recklessly when he is winning, handing the game back to them.
 \\\\
 Statistical analysis of a simple folk game may be overkill. In any case, the rest of the code is tedium: shuffling players and running $n = 10,000$ simulated games. $n$ appears to be large enough that running $n+$ simulations would produce similar results, $\pm 1\%$.
-\begin{verbatimtab}
-$ make
+\begin{verbatim}
+$ shake
 $ ./pig
 Running 10000 games...
 Totaling wins...
@@ -193,5 +190,5 @@ Roll Bad K  3%
 Always Hold 0%
 Always Roll 0%
 Roll Once 0%
-\end{verbatimtab}
+\end{verbatim}
 \end{document}

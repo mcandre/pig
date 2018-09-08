@@ -16,7 +16,7 @@ main = do
     phony "hlint" $
       cmd_ "hlint" "."
 
-    phony "lacheck" $ do
+    phony "lacheck" $
       mapM_ (cmd_ . ("lacheck " ++)) =<< getDirectoryFiles "." ["//*.tex"]
 
     phony "lint" $

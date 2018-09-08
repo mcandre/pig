@@ -123,7 +123,7 @@ rollK (p:ps) rs
   | length rs < 6 = Roll
   | otherwise = Hold
   where
-    challengers = sortBy (comparing score) (p:ps)
+    challengers = sortOn score (p:ps)
     winning = name (last challengers) == name p
 
 -- | rollBadK is a poor player
@@ -135,7 +135,7 @@ rollBadK (p:ps) rs
   | length rs < 2 = Roll
   | otherwise = Hold
   where
-    challengers = sortBy (comparing score) (p:ps)
+    challengers = sortOn score (p:ps)
     winning = name (last challengers) == name p
 
 -- | defaultPlayer constructs a new player.
